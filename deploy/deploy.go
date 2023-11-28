@@ -10,6 +10,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/offchainlabs/nitro/cmd/chaininfo"
 	"github.com/offchainlabs/nitro/solgen/go/bridgegen"
 	"github.com/offchainlabs/nitro/solgen/go/challengegen"
@@ -228,15 +229,24 @@ func deployRollupCreator(ctx context.Context, l1Reader *headerreader.HeaderReade
 	return rollupCreator, rollupCreatorAddress, validatorUtils, validatorWalletCreator, nil
 }
 
-func DeployOnL1(ctx context.Context, parentChainReader *headerreader.HeaderReader, deployAuth *bind.TransactOpts, batchPoster common.Address, authorizeValidators uint64, config rollupgen.Config, nativeToken common.Address, maxDataSize *big.Int) (*chaininfo.RollupAddresses, error) {
+func DeployOnL1(ctx context.Context,
+	parentChainReader *headerreader.HeaderReader,
+	deployAuth *bind.TransactOpts,
+	batchPoster common.Address,
+	authorizeValidators uint64,
+	config rollupgen.Config,
+	nativeToken common.Address,
+	maxDataSize *big.Int,
+	l1client ethclient.Client,
+	validatorWalletCreator common.Address,
+	validatorUtils common.Address,
+	rollupCreatorAddr string,
+) (*chaininfo.RollupAddresses, error) {
 	if config.WasmModuleRoot == (common.Hash{}) {
 		return nil, errors.New("no machine specified")
 	}
 
-	rollupCreator, _, validatorUtils, validatorWalletCreator, err := deployRollupCreator(ctx, parentChainReader, deployAuth, maxDataSize)
-	if err != nil {
-		return nil, fmt.Errorf("error deploying rollup creator: %w", err)
-	}
+	rollupCreator, _ := rollupgen.NewRollupCreator(common.HexToAddress(rollupCreatorAddr), &l1client)
 
 	var validatorAddrs []common.Address
 	for i := uint64(1); i <= authorizeValidators; i++ {
