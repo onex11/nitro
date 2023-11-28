@@ -30,6 +30,181 @@ import (
 	deploycode "github.com/offchainlabs/nitro/deploy"
 )
 
+type NodeConfig struct {
+	Chain       Chain       `json:"chain"`
+	ParentChain ParentChain `json:"parent-chain"`
+	HTTP        HTTP        `json:"http"`
+	Node        Node        `json:"node"`
+}
+
+type Dangerous struct {
+	NoCoordinator bool `json:"no-coordinator"`
+}
+type Sequencer struct {
+	MaxTxDataSize int       `json:"max-tx-data-size"`
+	Enable        bool      `json:"enable"`
+	Dangerous     Dangerous `json:"dangerous"`
+	MaxBlockSpeed string    `json:"max-block-speed"`
+}
+type DelayedSequencer struct {
+	Enable bool `json:"enable"`
+}
+type ParentChainWallet struct {
+	PrivateKey string `json:"private-key"`
+}
+type BatchPoster struct {
+	MaxSize           int               `json:"max-size"`
+	Enable            bool              `json:"enable"`
+	ParentChainWallet ParentChainWallet `json:"parent-chain-wallet"`
+}
+type Staker struct {
+	Enable            bool              `json:"enable"`
+	Strategy          string            `json:"strategy"`
+	ParentChainWallet ParentChainWallet `json:"parent-chain-wallet"`
+}
+type Caching struct {
+	Archive bool `json:"archive"`
+}
+type RestAggregator struct {
+	Enable bool   `json:"enable"`
+	Urls   string `json:"urls"`
+}
+type RPCAggregator struct {
+	Enable        bool   `json:"enable"`
+	AssumedHonest int    `json:"assumed-honest"`
+	Backends      string `json:"backends"`
+}
+type DataAvailability struct {
+	Enable                bool           `json:"enable"`
+	SequencerInboxAddress string         `json:"sequencer-inbox-address"`
+	ParentChainNodeURL    string         `json:"parent-chain-node-url"`
+	RestAggregator        RestAggregator `json:"rest-aggregator"`
+	RPCAggregator         RPCAggregator  `json:"rpc-aggregator"`
+}
+type Node struct {
+	ForwardingTarget string           `json:"forwarding-target"`
+	Sequencer        Sequencer        `json:"sequencer"`
+	DelayedSequencer DelayedSequencer `json:"delayed-sequencer"`
+	BatchPoster      BatchPoster      `json:"batch-poster"`
+	Staker           Staker           `json:"staker"`
+	Caching          Caching          `json:"caching"`
+	DataAvailability DataAvailability `json:"data-availability"`
+}
+
+type Clique struct {
+	Period int `json:"period"`
+	Epoch  int `json:"epoch"`
+}
+
+type Arbitrum struct {
+	EnableArbOS               bool   `json:"EnableArbOS"`
+	AllowDebugPrecompiles     bool   `json:"AllowDebugPrecompiles"`
+	DataAvailabilityCommittee bool   `json:"DataAvailabilityCommittee"`
+	InitialArbOSVersion       int    `json:"InitialArbOSVersion"`
+	InitialChainOwner         string `json:"InitialChainOwner"`
+	GenesisBlockNum           int    `json:"GenesisBlockNum"`
+}
+
+type ChainConfig struct {
+	ChainID             int64    `json:"chainId"`
+	HomesteadBlock      int      `json:"homesteadBlock"`
+	DaoForkBlock        any      `json:"daoForkBlock"`
+	DaoForkSupport      bool     `json:"daoForkSupport"`
+	Eip150Block         int      `json:"eip150Block"`
+	Eip150Hash          string   `json:"eip150Hash"`
+	Eip155Block         int      `json:"eip155Block"`
+	Eip158Block         int      `json:"eip158Block"`
+	ByzantiumBlock      int      `json:"byzantiumBlock"`
+	ConstantinopleBlock int      `json:"constantinopleBlock"`
+	PetersburgBlock     int      `json:"petersburgBlock"`
+	IstanbulBlock       int      `json:"istanbulBlock"`
+	MuirGlacierBlock    int      `json:"muirGlacierBlock"`
+	BerlinBlock         int      `json:"berlinBlock"`
+	LondonBlock         int      `json:"londonBlock"`
+	Clique              Clique   `json:"clique"`
+	Arbitrum            Arbitrum `json:"arbitrum"`
+}
+
+type Rollup struct {
+	Bridge                 string `json:"bridge"`
+	Inbox                  string `json:"inbox"`
+	SequencerInbox         string `json:"sequencer-inbox"`
+	Rollup                 string `json:"rollup"`
+	ValidatorUtils         string `json:"validator-utils"`
+	ValidatorWalletCreator string `json:"validator-wallet-creator"`
+	DeployedAt             int    `json:"deployed-at"`
+}
+
+type Info struct {
+	ChainID       int64       `json:"chain-id"`
+	ParentChainID int         `json:"parent-chain-id"`
+	ChainName     string      `json:"chain-name"`
+	ChainConfig   ChainConfig `json:"chain-config"`
+	Rollup        Rollup      `json:"rollup"`
+}
+
+type Chain struct {
+	InfoJSON string `json:"info-json"`
+	Name     string `json:"name"`
+}
+
+type Connection struct {
+	URL string `json:"url"`
+}
+
+type ParentChain struct {
+	Connection Connection `json:"connection"`
+}
+
+type HTTP struct {
+	Addr       string   `json:"addr"`
+	Port       int      `json:"port"`
+	Vhosts     string   `json:"vhosts"`
+	Corsdomain string   `json:"corsdomain"`
+	API        []string `json:"api"`
+}
+
+type InitConfig struct {
+	Force           bool          `koanf:"force"`
+	Url             string        `koanf:"url"`
+	DownloadPath    string        `koanf:"download-path"`
+	DownloadPoll    time.Duration `koanf:"download-poll"`
+	DevInit         bool          `koanf:"dev-init"`
+	DevInitAddress  string        `koanf:"dev-init-address"`
+	DevInitBlockNum uint64        `koanf:"dev-init-blocknum"`
+	Empty           bool          `koanf:"empty"`
+	AccountsPerSync uint          `koanf:"accounts-per-sync"`
+	ImportFile      string        `koanf:"import-file"`
+	ThenQuit        bool          `koanf:"then-quit"`
+	Prune           string        `koanf:"prune"`
+	PruneBloomSize  uint64        `koanf:"prune-bloom-size"`
+	ResetToMessage  int64         `koanf:"reset-to-message"`
+}
+
+type OrbitSetupScriptConfig struct {
+	ChainId                    uint64 `json:"chainId"`
+	ChainName                  string `json:"chainName"`
+	MinL2BaseFee               uint64 `json:"minL2BaseFee"`
+	ParentChainId              uint64 `json:"parentChainId"`
+	ParentChainNodeUrl         string `json:"parent-chain-node-url"`
+	BatchPoster                string `json:"batchPoster"`
+	Staker                     string `json:"staker"`
+	Outbox                     string `json:"outbox"`
+	AdminProxy                 string `json:"adminProxy"`
+	NetworkFeeReceiver         string `json:"networkFeeReceiver"`
+	InfrastructureFeeCollector string `json:"infrastructureFeeCollector"`
+	ChainOwner                 string `json:"chainOwner"`
+	Bridge                     string `json:"bridge"`
+	Inbox                      string `json:"inbox"`
+	SequencerInbox             string `json:"sequencerInbox"`
+	Rollup                     string `json:"rollup"`
+	NativeToken                string `json:"nativeToken"`
+	UpgradeExecutor            string `json:"upgradeExecutor"`
+	Utils                      string `json:"utils"`
+	ValidatorWalletCreator     string `json:"validatorWalletCreator"`
+	DeployedAtBlockNumber      int64  `json:"deployedAtBlockNumber"`
+}
+
 func main() {
 	// read config file
 	deployArg, err := ioutil.ReadFile("./rollup-config/deploy_config.json")
@@ -58,6 +233,8 @@ func deploy(args map[string]string) {
 	wasmmoduleroot := args["wasmmoduleroot"]
 	wasmrootpath := args["wasmrootpath"]
 	l1privatekey := args["l1privatekey"]
+	batcherPrivateKey := args["batcherPrivateKey"]
+	stakePrivateKey := args["stakePrivateKey"]
 	l2ChainName := args["l2chainname"]
 	prod := args["prod"] == "true"
 
@@ -71,6 +248,8 @@ func deploy(args map[string]string) {
 	l2ChainConfig := flag.String("l2chainconfig", "./rollup-config/l2_chain_config.json", "L2 chain config json file")
 	outfile := flag.String("l1deployment", "./rollup-deployment/deploy.json", "deployment output json file")
 	l2ChainInfo := flag.String("l2chaininfo", "./rollup-deployment/l2_chain_info.json", "L2 chain info output json file")
+	orbitSetupScriptConfigInfo := flag.String("orbitSetupScriptConfigInfo", "./rollup-deployment/orbitSetupScriptConfig.json", "L2 chain info output json file")
+	nodeConfigInfo := flag.String("nodeconfig", "./rollup-deployment/nodeConfig.json", "L2 chain info output json file")
 	authorizevalidators := flag.Uint64("authorizevalidators", 1, "Number of validators to preemptively authorize")
 	txTimeout := flag.Duration("txtimeout", 10*time.Minute, "Timeout when waiting for a transaction to be included in a block")
 	validatorWalletCreator := common.HexToAddress("0x06E341073b2749e0Bb9912461351f716DeCDa9b0")
@@ -204,6 +383,197 @@ func deploy(args map[string]string) {
 		panic(err)
 	}
 	if err := os.WriteFile(*l2ChainInfo, chainsInfoJson, 0600); err != nil {
+		panic(err)
+	}
+	orbitSetupScriptConfig := &OrbitSetupScriptConfig{
+		ChainId:            chainConfig.ChainID.Uint64(),
+		ChainName:          l2ChainName,
+		MinL2BaseFee:       100000000,
+		ParentChainId:      l1ChainIdUint,
+		ParentChainNodeUrl: l1conn,
+		BatchPoster:        sequencerAddressString,
+		/// check
+		Staker:     "0x2D2c1A82686F922AEcE00D7Da326BD7b0580358f",
+		Outbox:     "0x6510c2B2A79196C8cF39276b28BD63e8fD09B27F",
+		AdminProxy: "0xC822Cb1B147EC44DEa84cA90f9D70E39914944C6",
+		/// check
+		NetworkFeeReceiver:         ownerAddressString,
+		InfrastructureFeeCollector: ownerAddressString,
+		ChainOwner:                 ownerAddressString,
+		Bridge:                     deployedAddresses.Bridge.Hex(),
+		Inbox:                      deployedAddresses.Inbox.Hex(),
+		SequencerInbox:             deployedAddresses.SequencerInbox.Hex(),
+		Rollup:                     deployedAddresses.Rollup.Hex(),
+		NativeToken:                *nativeTokenAddressString,
+		UpgradeExecutor:            deployedAddresses.UpgradeExecutor.Hex(),
+		Utils:                      validatorUtils.Hex(),
+		ValidatorWalletCreator:     validatorUtils.Hex(),
+		DeployedAtBlockNumber:      int64(deployedAddresses.DeployedAt),
+	}
+	orbitSetupScriptConfigJson, err := json.Marshal(orbitSetupScriptConfig)
+	if err != nil {
+		panic(err)
+	}
+	if err := os.WriteFile(*orbitSetupScriptConfigInfo, orbitSetupScriptConfigJson, 0600); err != nil {
+		panic(err)
+	}
+
+	clique := Clique{
+		Period: 0,
+		Epoch:  0,
+	}
+
+	arbitrum := Arbitrum{
+		EnableArbOS:               true,
+		AllowDebugPrecompiles:     false,
+		DataAvailabilityCommittee: true,
+		InitialArbOSVersion:       10,
+		InitialChainOwner:         ownerAddressString,
+		GenesisBlockNum:           0,
+	}
+
+	chainCfg := ChainConfig{
+		ChainID:             chainConfig.ChainID.Int64(),
+		HomesteadBlock:      0,
+		DaoForkBlock:        nil,
+		DaoForkSupport:      true,
+		Eip150Block:         0,
+		Eip150Hash:          "0x0000000000000000000000000000000000000000000000000000000000000000",
+		Eip155Block:         0,
+		Eip158Block:         0,
+		ByzantiumBlock:      0,
+		ConstantinopleBlock: 0,
+		PetersburgBlock:     0,
+		IstanbulBlock:       0,
+		MuirGlacierBlock:    0,
+		BerlinBlock:         0,
+		LondonBlock:         0,
+		Clique:              clique,
+		Arbitrum:            arbitrum,
+	}
+
+	rollup := Rollup{
+		Bridge:                 deployedAddresses.Bridge.Hex(),
+		Inbox:                  deployedAddresses.Inbox.Hex(),
+		SequencerInbox:         deployedAddresses.SequencerInbox.Hex(),
+		Rollup:                 deployedAddresses.Rollup.Hex(),
+		ValidatorUtils:         validatorUtils.Hex(),
+		ValidatorWalletCreator: validatorUtils.Hex(),
+		DeployedAt:             int(deployedAddresses.DeployedAt),
+	}
+
+	info := []Info{
+		{
+			ChainID:       chainConfig.ChainID.Int64(),
+			ParentChainID: int(l1ChainIdUint),
+			ChainName:     l2ChainName,
+			ChainConfig:   chainCfg,
+			Rollup:        rollup,
+		},
+	}
+
+	infoJson, _ := json.Marshal(info)
+	chain := Chain{
+		InfoJSON: string(infoJson),
+		Name:     l2ChainName,
+	}
+
+	connection := Connection{
+		URL: l1conn,
+	}
+	parentChain := ParentChain{
+		Connection: connection,
+	}
+
+	http := HTTP{
+		Addr:       "0.0.0.0",
+		Port:       8449,
+		Vhosts:     "*",
+		Corsdomain: "*",
+		API: []string{"eth",
+			"net",
+			"web3",
+			"arb",
+			"debug"},
+	}
+
+	dangerous := Dangerous{
+		NoCoordinator: true,
+	}
+
+	sequencer := Sequencer{
+		MaxTxDataSize: int(maxDataSize.Int64()),
+		Enable:        true,
+		Dangerous:     dangerous,
+		MaxBlockSpeed: "250ms",
+	}
+
+	delayedSequencer := DelayedSequencer{
+		Enable: true,
+	}
+
+	batcherWallet := ParentChainWallet{
+		PrivateKey: batcherPrivateKey,
+	}
+
+	batchPoster := BatchPoster{
+		MaxSize:           90000,
+		Enable:            true,
+		ParentChainWallet: batcherWallet,
+	}
+
+	stakerWallet := ParentChainWallet{
+		PrivateKey: stakePrivateKey,
+	}
+
+	staker := Staker{
+		Enable:            true,
+		Strategy:          "MakeNodes",
+		ParentChainWallet: stakerWallet,
+	}
+
+	caching := Caching{
+		Archive: true,
+	}
+
+	restAggregator := RestAggregator{
+		Enable: true,
+		Urls:   "http://localhost:9876",
+	}
+
+	rPCAggregator := RPCAggregator{
+		Enable:        true,
+		AssumedHonest: 1,
+		Backends:      "[{\"url\":\"http://localhost:9876\",\"pubkey\":\"YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==\",\"signermask\":1}]",
+	}
+
+	dataAvailability := DataAvailability{
+		Enable:                true,
+		SequencerInboxAddress: deployedAddresses.SequencerInbox.Hex(),
+		ParentChainNodeURL:    l1conn,
+		RestAggregator:        restAggregator,
+		RPCAggregator:         rPCAggregator,
+	}
+
+	node := Node{
+		ForwardingTarget: "",
+		Sequencer:        sequencer,
+		DelayedSequencer: delayedSequencer,
+		BatchPoster:      batchPoster,
+		Staker:           staker,
+		Caching:          caching,
+		DataAvailability: dataAvailability,
+	}
+
+	nodeConfig := NodeConfig{
+		Chain:       chain,
+		ParentChain: parentChain,
+		HTTP:        http,
+		Node:        node,
+	}
+
+	nodeConfigJson, _ := json.Marshal(nodeConfig)
+	if err := os.WriteFile(*nodeConfigInfo, nodeConfigJson, 0600); err != nil {
 		panic(err)
 	}
 }
