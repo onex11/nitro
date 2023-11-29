@@ -1,0 +1,49 @@
+name: Build createrollup Docker Image
+on:
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - name: build and push orbit-createrollup
+            image: orbit-createrollup
+            dockerfile: Dockerfile.deploy
+            context: .
+            buildargs: ''
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Prepare Environment Variables
+        run: |
+          echo "SHORT_SHA=${GITHUB_SHA::7}" | tee -a $GITHUB_ENV
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.ECR_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.ECR_ACCESS_KEY }}
+          aws-region: us-west-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: ${{ matrix.name }}
+        uses: docker/build-push-action@v4
+        with:
+          context: ${{ matrix.context }}
+          push: true
+          tags: ${{ secrets.ECR_REGISTRY }}/${{ matrix.image }}:${{ github.sha }} , ${{ secrets.ECR_REGISTRY }}/${{ matrix.image }}:${{ env.SHORT_SHA }} , ${{ secrets.ECR_REGISTRY }}/${{ matrix.image }}:latest
+          file: ${{ matrix.dockerfile }}
+          provenance: false
