@@ -1,0 +1,12 @@
+{
+    "l1conn": "https://sepolia-rollup.arbitrum.io/rpc",
+    "l1ChainIdUint": "421614",
+    "ownerAddressString": "0x<address matching l1privatekey>",
+    "sequencerAddressString": "0x42ef34286163d625ED9256d46E195E84ff0B61B2",
+    "maxDataSizeUint": "104857",
+    "wasmmoduleroot": "0x0754e09320c381566cc0449904c377a52bd34a6b9404432e80afd573b67f7b17",
+    "wasmrootpath": "",
+    "l1privatekey": "don't add 0x prefix",
+    "l2chainname": "Testl2Chain1",
+    "prod": "false"
+}
