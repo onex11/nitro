@@ -155,5 +155,11 @@ RUN NITRO_BUILD_IGNORE_TIMESTAMPS=1 make target/bin/deploy
 
 FROM debian:bullseye-slim as nitro-node-slim
 COPY --from=node-builder /workspace/target/bin/deploy /usr/local/bin/
+RUN export DEBIAN_FRONTEND=noninteractive && \
+    apt-get update && \
+    apt-get install -y \
+    ca-certificates \
+    wabt && \
+    /usr/sbin/update-ca-certificates
 
 ENTRYPOINT [ "/usr/local/bin/deploy" ]
