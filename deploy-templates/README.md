@@ -5,6 +5,7 @@
    - `l1conn` and `l1ChainIdUint` - L2 info (Arbitrum Sepolia or Arbitrum One)
    - `ownerAddressString` and `l1privatekey` - Initial owner account
    - `sequencerAddressString` - BatchPoster account
+   - `stakerAddressString` - Staker account
    - `l2chainname` - L3 network name
    - `prod` - `false` for testnet
 2. Edit `l2_chain_config.json`
