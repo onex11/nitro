@@ -9,7 +9,6 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/offchainlabs/nitro/cmd/chaininfo"
 	"github.com/offchainlabs/nitro/solgen/go/bridgegen"
@@ -233,6 +232,7 @@ func DeployOnL1(ctx context.Context,
 	parentChainReader *headerreader.HeaderReader,
 	deployAuth *bind.TransactOpts,
 	batchPoster common.Address,
+	staker common.Address,
 	authorizeValidators uint64,
 	config rollupgen.Config,
 	nativeToken common.Address,
@@ -250,7 +250,7 @@ func DeployOnL1(ctx context.Context,
 
 	var validatorAddrs []common.Address
 	for i := uint64(1); i <= authorizeValidators; i++ {
-		validatorAddrs = append(validatorAddrs, crypto.CreateAddress(validatorWalletCreator, i))
+		validatorAddrs = append(validatorAddrs, staker)
 	}
 
 	deployParams := rollupgen.RollupCreatorRollupDeploymentParams{

@@ -229,6 +229,7 @@ func deploy(args map[string]string) {
 	l1ChainIdUint, _ := strconv.ParseUint(args["l1ChainIdUint"], 10, 64)
 	ownerAddressString := args["ownerAddressString"]
 	sequencerAddressString := args["sequencerAddressString"]
+	stakerAddressString := args["stakerAddressString"]
 	maxDataSizeUint, _ := strconv.ParseUint(args["maxDataSizeUint"], 10, 64)
 	wasmmoduleroot := args["wasmmoduleroot"]
 	wasmrootpath := args["wasmrootpath"]
@@ -301,6 +302,7 @@ func deploy(args map[string]string) {
 
 	sequencerAddress := common.HexToAddress(sequencerAddressString)
 	ownerAddress := common.HexToAddress(ownerAddressString)
+	stakerAddress := common.HexToAddress(stakerAddressString)
 	loserEscrowAddress := common.HexToAddress(*loserEscrowAddressString)
 	if sequencerAddress != (common.Address{}) && ownerAddress != l1TransactionOpts.From {
 		panic("cannot specify sequencer address if owner is not deployer")
@@ -347,6 +349,7 @@ func deploy(args map[string]string) {
 		l1Reader,
 		l1TransactionOpts,
 		sequencerAddress,
+		stakerAddress,
 		*authorizevalidators,
 		arbnode.GenerateRollupConfig(prod, moduleRoot, ownerAddress, &chainConfig, chainConfigJson, loserEscrowAddress),
 		nativeToken,
@@ -392,8 +395,8 @@ func deploy(args map[string]string) {
 		ParentChainId:      l1ChainIdUint,
 		ParentChainNodeUrl: l1conn,
 		BatchPoster:        sequencerAddressString,
+		Staker:             stakerAddressString,
 		/// check
-		Staker:     "0x2D2c1A82686F922AEcE00D7Da326BD7b0580358f",
 		Outbox:     "0x6510c2B2A79196C8cF39276b28BD63e8fD09B27F",
 		AdminProxy: "0xC822Cb1B147EC44DEa84cA90f9D70E39914944C6",
 		/// check
