@@ -1,0 +1,6 @@
+{
+    "l1conn": "https://sepolia-rollup.arbitrum.io/rpc",
+    "l1privatekey": "",
+    "sequencerInbox": "0x4f8f39f11c4ba7421c603c61b677536b1559ddc4",
+    "upgradeExecutor": "0x625e136a6201a5af0110e7f30e972c6c8bf667c9"
+}

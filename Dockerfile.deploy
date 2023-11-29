@@ -153,10 +153,12 @@ RUN mkdir -p target/bin
 COPY .nitro-tag.txt /nitro-tag.txt
 RUN NITRO_BUILD_IGNORE_TIMESTAMPS=1 make target/bin/deploy
 RUN NITRO_BUILD_IGNORE_TIMESTAMPS=1 make target/bin/key-generate
+RUN NITRO_BUILD_IGNORE_TIMESTAMPS=1 make target/bin/da-key
 
 FROM debian:bullseye-slim as nitro-node-slim
 COPY --from=node-builder /workspace/target/bin/deploy /usr/local/bin/
 COPY --from=node-builder /workspace/target/bin/key-generate /usr/local/bin/
+COPY --from=node-builder /workspace/target/bin/da-key /usr/local/bin/
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update && \
     apt-get install -y \

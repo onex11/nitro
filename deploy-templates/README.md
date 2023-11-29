@@ -24,3 +24,14 @@
       305587085711.dkr.ecr.us-west-2.amazonaws.com/orbit-createrollup:latest 2>&1 | tee deploy-result/docker-run-log.txt
    ```
 4. Keep all files under `deploy-result`
+
+## Steps to register DA committee
+1. Edit `set_key.json`
+2. Add `das_bls.pub`
+3. Execute setValidKeyset
+   ```
+   docker run --rm \
+      --volume $(pwd)/deploy-templates:/rollup-config \
+      --entrypoint /usr/local/bin/da-key \
+      305587085711.dkr.ecr.us-west-2.amazonaws.com/orbit-createrollup:latest 2>&1 | tee docker-run-log.txt
+   ```

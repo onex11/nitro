@@ -173,6 +173,9 @@ $(output_root)/bin/deploy: $(DEP_PREDICATE) build-node-deps
 $(output_root)/bin/key-generate: $(DEP_PREDICATE) build-node-deps
 	go build $(GOLANG_PARAMS) -o $@ "$(CURDIR)/cmd/key-generate"
 
+$(output_root)/bin/da-key: $(DEP_PREDICATE) build-node-deps
+	go build $(GOLANG_PARAMS) -o $@ "$(CURDIR)/cmd/da-key"
+
 $(output_root)/bin/relay: $(DEP_PREDICATE) build-node-deps
 	go build $(GOLANG_PARAMS) -o $@ "$(CURDIR)/cmd/relay"
 
