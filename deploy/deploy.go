@@ -282,6 +282,8 @@ func DeployOnL1(ctx context.Context,
 	return &chaininfo.RollupAddresses{
 		Bridge:                 info.Bridge,
 		Inbox:                  info.InboxAddress,
+		OutBox:                 info.Outbox,
+		AdminProxy:             info.AdminProxy,
 		SequencerInbox:         info.SequencerInbox,
 		DeployedAt:             receipt.BlockNumber.Uint64(),
 		Rollup:                 info.RollupAddress,

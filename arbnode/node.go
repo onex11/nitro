@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"math/big"
+	"strconv"
 	"strings"
 	"time"
 
@@ -47,18 +48,20 @@ import (
 	"github.com/offchainlabs/nitro/wsbroadcastserver"
 )
 
-func GenerateRollupConfig(prod bool, wasmModuleRoot common.Hash, rollupOwner common.Address, chainConfig *params.ChainConfig, serializedChainConfig []byte, loserStakeEscrow common.Address) rollupgen.Config {
-	var confirmPeriod uint64
-	if prod {
-		confirmPeriod = 45818
-	} else {
-		confirmPeriod = 20
+func GenerateRollupConfig(prod bool, wasmModuleRoot common.Hash, rollupOwner common.Address, chainConfig *params.ChainConfig, serializedChainConfig []byte, loserStakeEscrow common.Address, minimumstake string, challengePeriodBlocks string) rollupgen.Config {
+	confirmPeriod, err := strconv.ParseInt(challengePeriodBlocks, 10, 64)
+	if err != nil {
+		panic(err.Error())
+	}
+	minStake, err := strconv.ParseInt(minimumstake, 10, 64)
+	if err != nil {
+		panic(err.Error())
 	}
 	return rollupgen.Config{
-		ConfirmPeriodBlocks:      confirmPeriod,
+		ConfirmPeriodBlocks:      uint64(confirmPeriod),
 		ExtraChallengeTimeBlocks: 200,
 		StakeToken:               common.Address{},
-		BaseStake:                big.NewInt(params.Ether),
+		BaseStake:                big.NewInt(minStake),
 		WasmModuleRoot:           wasmModuleRoot,
 		Owner:                    rollupOwner,
 		LoserStakeEscrow:         loserStakeEscrow,

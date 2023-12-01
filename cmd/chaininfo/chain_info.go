@@ -104,6 +104,8 @@ func findChainInfo(chainId uint64, chainName string, chainsInfoBytes []byte) (*C
 
 type RollupAddresses struct {
 	Bridge                 common.Address `json:"bridge"`
+	OutBox                 common.Address `json:"outbox"`
+	AdminProxy             common.Address `json:"adminProxy"`
 	Inbox                  common.Address `json:"inbox"`
 	SequencerInbox         common.Address `json:"sequencer-inbox"`
 	Rollup                 common.Address `json:"rollup"`

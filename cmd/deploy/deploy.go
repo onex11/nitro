@@ -238,6 +238,8 @@ func deploy(args map[string]string) {
 	stakePrivateKey := args["stakePrivateKey"]
 	l2ChainName := args["l2chainname"]
 	prod := args["prod"] == "true"
+	minimumstake := args["minimumstake"]
+	challengePeriodBlocks := args["challengePeriodBlocks"]
 
 	// keep default value
 	l1keystore := flag.String("l1keystore", "", "l1 private key store")
@@ -351,7 +353,7 @@ func deploy(args map[string]string) {
 		sequencerAddress,
 		stakerAddress,
 		*authorizevalidators,
-		arbnode.GenerateRollupConfig(prod, moduleRoot, ownerAddress, &chainConfig, chainConfigJson, loserEscrowAddress),
+		arbnode.GenerateRollupConfig(prod, moduleRoot, ownerAddress, &chainConfig, chainConfigJson, loserEscrowAddress, minimumstake, challengePeriodBlocks),
 		nativeToken,
 		maxDataSize,
 		*l1client,
@@ -389,17 +391,15 @@ func deploy(args map[string]string) {
 		panic(err)
 	}
 	orbitSetupScriptConfig := &OrbitSetupScriptConfig{
-		ChainId:            chainConfig.ChainID.Uint64(),
-		ChainName:          l2ChainName,
-		MinL2BaseFee:       100000000,
-		ParentChainId:      l1ChainIdUint,
-		ParentChainNodeUrl: l1conn,
-		BatchPoster:        sequencerAddressString,
-		Staker:             stakerAddressString,
-		/// check
-		Outbox:     "0x6510c2B2A79196C8cF39276b28BD63e8fD09B27F",
-		AdminProxy: "0xC822Cb1B147EC44DEa84cA90f9D70E39914944C6",
-		/// check
+		ChainId:                    chainConfig.ChainID.Uint64(),
+		ChainName:                  l2ChainName,
+		MinL2BaseFee:               100000000,
+		ParentChainId:              l1ChainIdUint,
+		ParentChainNodeUrl:         l1conn,
+		BatchPoster:                sequencerAddressString,
+		Staker:                     stakerAddressString,
+		Outbox:                     deployedAddresses.OutBox.Hex(),
+		AdminProxy:                 deployedAddresses.AdminProxy.Hex(),
 		NetworkFeeReceiver:         ownerAddressString,
 		InfrastructureFeeCollector: ownerAddressString,
 		ChainOwner:                 ownerAddressString,
