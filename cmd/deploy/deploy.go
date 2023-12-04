@@ -228,6 +228,8 @@ func deploy(args map[string]string) {
 	l1conn := args["l1conn"]
 	l1ChainIdUint, _ := strconv.ParseUint(args["l1ChainIdUint"], 10, 64)
 	ownerAddressString := args["ownerAddressString"]
+	networkFeeReceiver := args["networkFeeReceiver"]
+	infrastructureFeeCollector := args["infrastructureFeeCollector"]
 	sequencerAddressString := args["sequencerAddressString"]
 	stakerAddressString := args["stakerAddressString"]
 	maxDataSizeUint, _ := strconv.ParseUint(args["maxDataSizeUint"], 10, 64)
@@ -400,8 +402,8 @@ func deploy(args map[string]string) {
 		Staker:                     stakerAddressString,
 		Outbox:                     deployedAddresses.OutBox.Hex(),
 		AdminProxy:                 deployedAddresses.AdminProxy.Hex(),
-		NetworkFeeReceiver:         ownerAddressString,
-		InfrastructureFeeCollector: ownerAddressString,
+		NetworkFeeReceiver:         networkFeeReceiver,
+		InfrastructureFeeCollector: infrastructureFeeCollector,
 		ChainOwner:                 ownerAddressString,
 		Bridge:                     deployedAddresses.Bridge.Hex(),
 		Inbox:                      deployedAddresses.Inbox.Hex(),
