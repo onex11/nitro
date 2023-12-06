@@ -242,12 +242,12 @@ func deploy(args map[string]string) {
 	prod := args["prod"] == "true"
 	minimumstake := args["minimumstake"]
 	challengePeriodBlocks := args["challengePeriodBlocks"]
+	nativeTokenAddressString := args["nativeTokenAddressString"]
 
 	// keep default value
 	l1keystore := flag.String("l1keystore", "", "l1 private key store")
 	l1passphrase := flag.String("l1passphrase", "passphrase", "l1 private key file passphrase")
 	deployAccount := flag.String("l1DeployAccount", "", "l1 seq account to use (default is first account in keystore)")
-	nativeTokenAddressString := flag.String("nativeTokenAddress", "0x0000000000000000000000000000000000000000", "address of the ERC20 token which is used as native L2 currency")
 	// double check this
 	loserEscrowAddressString := flag.String("loserEscrowAddress", "0x0000000000000000000000000000000000000000", "the address which half of challenge loser's funds accumulate at")
 	l2ChainConfig := flag.String("l2chainconfig", "./rollup-config/l2_chain_config.json", "L2 chain config json file")
