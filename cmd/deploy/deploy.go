@@ -347,7 +347,7 @@ func deploy(args map[string]string) {
 	l1Reader.Start(ctx)
 	defer l1Reader.StopAndWait()
 
-	nativeToken := common.HexToAddress(*nativeTokenAddressString)
+	nativeToken := common.HexToAddress(nativeTokenAddressString)
 	deployedAddresses, err := deploycode.DeployOnL1(
 		ctx,
 		l1Reader,
@@ -409,7 +409,7 @@ func deploy(args map[string]string) {
 		Inbox:                      deployedAddresses.Inbox.Hex(),
 		SequencerInbox:             deployedAddresses.SequencerInbox.Hex(),
 		Rollup:                     deployedAddresses.Rollup.Hex(),
-		NativeToken:                *nativeTokenAddressString,
+		NativeToken:                nativeTokenAddressString,
 		UpgradeExecutor:            deployedAddresses.UpgradeExecutor.Hex(),
 		Utils:                      validatorUtils.Hex(),
 		ValidatorWalletCreator:     validatorUtils.Hex(),
