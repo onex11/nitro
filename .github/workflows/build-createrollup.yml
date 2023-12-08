@@ -27,6 +27,9 @@ jobs:
       - name: Prepare Environment Variables
         run: |
           echo "SHORT_SHA=${GITHUB_SHA::7}" | tee -a $GITHUB_ENV
+          GIT_TAG=$(git tag --points-at HEAD)
+          echo "GIT_TAG=$GIT_TAG" | tee -a $GITHUB_ENV
+          echo "REF_NAME=$(echo ${GIT_TAG:-$GITHUB_REF_NAME} | sed 's/[^a-zA-Z0-9._]/-/g')" | tee -a $GITHUB_ENV
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -44,6 +47,6 @@ jobs:
         with:
           context: ${{ matrix.context }}
           push: true
-          tags: ${{ secrets.ECR_REGISTRY }}/${{ matrix.image }}:${{ github.sha }} , ${{ secrets.ECR_REGISTRY }}/${{ matrix.image }}:${{ env.SHORT_SHA }} , ${{ secrets.ECR_REGISTRY }}/${{ matrix.image }}:latest
+          tags: ${{ secrets.ECR_REGISTRY }}/${{ matrix.image }}:${{ github.sha }} , ${{ secrets.ECR_REGISTRY }}/${{ matrix.image }}:${{ env.SHORT_SHA }} , ${{ secrets.ECR_REGISTRY }}/${{ matrix.image }}:${{ env.REF_NAME }} , ${{ secrets.ECR_REGISTRY }}/${{ matrix.image }}:${{ env.REF_NAME }}-${{ env.SHORT_SHA }} , ${{ secrets.ECR_REGISTRY }}/${{ matrix.image }}:latest
           file: ${{ matrix.dockerfile }}
           provenance: false
