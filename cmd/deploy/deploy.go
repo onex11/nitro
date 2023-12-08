@@ -243,6 +243,8 @@ func deploy(args map[string]string) {
 	minimumstake := args["minimumstake"]
 	challengePeriodBlocks := args["challengePeriodBlocks"]
 	nativeTokenAddressString := args["nativeTokenAddressString"]
+	rollupCreatorAddr := args["rollupCreatorAddr"]
+
 
 	// keep default value
 	l1keystore := flag.String("l1keystore", "", "l1 private key store")
@@ -259,7 +261,6 @@ func deploy(args map[string]string) {
 	txTimeout := flag.Duration("txtimeout", 10*time.Minute, "Timeout when waiting for a transaction to be included in a block")
 	validatorWalletCreator := common.HexToAddress("0x06E341073b2749e0Bb9912461351f716DeCDa9b0")
 	validatorUtils := common.HexToAddress("0xB11EB62DD2B352886A4530A9106fE427844D515f")
-	rollupCreatorAddr := "0x06E341073b2749e0Bb9912461351f716DeCDa9b0"
 
 	flag.Parse()
 	l1ChainId := new(big.Int).SetUint64(l1ChainIdUint)
