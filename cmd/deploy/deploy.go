@@ -244,7 +244,7 @@ func deploy(args map[string]string) {
 	challengePeriodBlocks := args["challengePeriodBlocks"]
 	nativeTokenAddressString := args["nativeTokenAddressString"]
 	rollupCreatorAddr := args["rollupCreatorAddr"]
-
+	stakeTokenAddressString := args["stakeTokenAddressString"]
 
 	// keep default value
 	l1keystore := flag.String("l1keystore", "", "l1 private key store")
@@ -349,6 +349,7 @@ func deploy(args map[string]string) {
 	defer l1Reader.StopAndWait()
 
 	nativeToken := common.HexToAddress(nativeTokenAddressString)
+
 	deployedAddresses, err := deploycode.DeployOnL1(
 		ctx,
 		l1Reader,
@@ -356,7 +357,7 @@ func deploy(args map[string]string) {
 		sequencerAddress,
 		stakerAddress,
 		*authorizevalidators,
-		arbnode.GenerateRollupConfig(prod, moduleRoot, ownerAddress, &chainConfig, chainConfigJson, loserEscrowAddress, minimumstake, challengePeriodBlocks),
+		arbnode.GenerateRollupConfig(prod, moduleRoot, ownerAddress, &chainConfig, chainConfigJson, loserEscrowAddress, minimumstake, challengePeriodBlocks, stakeTokenAddressString),
 		nativeToken,
 		maxDataSize,
 		*l1client,
