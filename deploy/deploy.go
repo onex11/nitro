@@ -289,7 +289,7 @@ func DeployOnL1(ctx context.Context,
 		Rollup:                 info.RollupAddress,
 		NativeToken:            nativeToken,
 		UpgradeExecutor:        info.UpgradeExecutor,
-		ValidatorUtils:         validatorUtils,
-		ValidatorWalletCreator: validatorWalletCreator,
+		ValidatorUtils:         info.ValidatorUtils,
+		ValidatorWalletCreator: info.ValidatorWalletCreator,
 	}, nil
 }
