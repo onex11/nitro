@@ -545,18 +545,18 @@ func deploy(args map[string]string) {
 	}
 
 	restAggregator := RestAggregator{
-		Enable: true,
+		Enable: anyTrustMode,
 		Urls:   "http://localhost:9876",
 	}
 
 	rPCAggregator := RPCAggregator{
-		Enable:        true,
+		Enable:        anyTrustMode,
 		AssumedHonest: 1,
 		Backends:      "[{\"url\":\"http://localhost:9876\",\"pubkey\":\"YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==\",\"signermask\":1}]",
 	}
 
 	dataAvailability := DataAvailability{
-		Enable:                true,
+		Enable:                anyTrustMode,
 		SequencerInboxAddress: deployedAddresses.SequencerInbox.Hex(),
 		ParentChainNodeURL:    l1conn,
 		RestAggregator:        restAggregator,
