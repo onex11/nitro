@@ -245,6 +245,7 @@ func deploy(args map[string]string) {
 	nativeTokenAddressString := args["nativeTokenAddressString"]
 	rollupCreatorAddr := args["rollupCreatorAddr"]
 	stakeTokenAddressString := args["stakeTokenAddressString"]
+	anyTrustMode := args["anyTrustMode"] == "true"
 
 	// keep default value
 	l1keystore := flag.String("l1keystore", "", "l1 private key store")
@@ -433,7 +434,7 @@ func deploy(args map[string]string) {
 	arbitrum := Arbitrum{
 		EnableArbOS:               true,
 		AllowDebugPrecompiles:     false,
-		DataAvailabilityCommittee: true,
+		DataAvailabilityCommittee: anyTrustMode,
 		InitialArbOSVersion:       10,
 		InitialChainOwner:         ownerAddressString,
 		GenesisBlockNum:           0,
